@@ -26,7 +26,7 @@ int findMin(process [],int);
 int findminprioritySelector(vector<int>);
 class Scheduling
 {
-	int noprocess,var,var1,timer,minPriority,m=0,cTsetter=0,pPI,pIvar,checker=0;
+	int noprocess,var,indef,var1,timer,minPriority,m=0,cTsetter=0,pPI,pIvar,checker=0,checker1=0;
 	process pro[100]; 
 	int previousminpriority;
 	string previouspro;
@@ -86,6 +86,10 @@ class Scheduling
 					break;
 				}
 			}
+			/*for(int i=0;i<prioritySelector.size();i++)
+			{
+				cout<<prioritySelector.at(i)<<"-----------------"<<q1.at(i)<<endl;
+			}*/
 			cout<<"["<<q1[var]<<"] "<<" is my selected process"<<endl;
 			if(m>=1)
 			{
@@ -121,25 +125,45 @@ class Scheduling
 				}	
 			}
 			pPI=var1;
-	
+			if(checker1==1)
+			{
+				startQ1Process();
+			}
 		}
 	
 		void startQ1Process()
 		{
 			while(q1.size()!=0)
 			{
+				checker1+=1;
 				int con=0;
-				//finalResult();
 				if(pro[var1].bT==0)
-				{
-					q1.erase(std::remove(q1.begin(),q1.end(),pro[var1].processId),q1.end());
-					prioritySelector.erase(prioritySelector.begin()+var,prioritySelector.begin()+(var+1));
+				{   
+					for(int i=0;i<q1.size();i++)
+					{
+						if(q1.at(i)==pro[var1].processId)
+						{
+							indef=i;
+						}
+					}
+					cout<<"index: "<<indef<<endl;
+					/*for(int i=0;i<prioritySelector.size();i++)
+					{
+						cout<<prioritySelector.at(i)<<"=========="<<q1.at(i)<<endl;
+					}*/
+					q1.erase(std::remove(q1.begin(),q1.end(),q1.at(indef)),q1.end());//pro[var1].processId
+					//cout<<"element removed"<<endl;
+					prioritySelector.erase(prioritySelector.begin()+indef,prioritySelector.begin()+(indef+1));
+					//cout<<"element's priority removed"<<endl;
+					//cout<<"elements removed"<<endl;
 					checker=1;
 					if(q1.size()==0)
 					{
+						checker1=0;
+						checker=0;
+						//cout<<"now terminated"<<endl;
 						break;
 					}
-					
 					processSelector();
 				}
 				
@@ -156,7 +180,6 @@ class Scheduling
 				pro[var1].bT-=1;
 				pro[var1].cT+=1;
 				timer=pro[var1].cT;
-				//cout<<"timer: "<<timer<<endl;
 				for(int i=0;i<noprocess;i++)
 				{
 					if(timer==pro[i].aT)
@@ -175,14 +198,83 @@ class Scheduling
 		
 		void startQ2process()
 		{
-			int TQ=2;
-			
-			
-			
-			
-			
-			
-			//............
+			int TQ=2,index2;
+			string pI,preprocess;
+			if(q2.size()!=0)
+			{
+				pI=q2.at(0);
+				cout<<"element at first index: "<<pI<<endl;
+				for(int i=0;i<noprocess;i++)
+				{
+					if(pI==pro[i].processId)
+					{
+						index2=i;
+					}
+				}
+				cout<<"cT of 1'st process is: "<<pro[index2].bT<<endl; 
+				cout<<"index found at: "<<index2<<endl;
+				cout<<"timer : "<<timer<<endl;
+				while(q2.size()!=0)
+				{
+					pro[index2].cT=timer;
+					cout<<"pro[index2].cT: "<<pro[index2].cT<<endl;
+					if(pro[index2].bT==1)
+					{
+						pro[index2].bT-=1;
+						pro[index2].cT+=1;	
+					}
+					else
+					{
+						pro[index2].bT-=TQ;
+						pro[index2].cT+=TQ;
+					}
+					timer=pro[index2].cT;
+					cout<<"burst time: "<<pro[index2].bT<<endl;
+					//cout<<"updated timer: "<<timer<<endl;
+					
+					for(int i=0;i<noprocess;i++)
+					{
+						if(timer==pro[i].aT)
+						{
+							q1.push_back(pro[i].processId);
+							prioritySelector.push_back(pro[i].pN);
+						}
+					}
+					if(q1.size()!=0)
+					{
+						checker1=1;
+						m=0;
+						processSelector();
+					}
+					if(pro[index2].bT==0)
+					{
+						q2.erase(std::remove(q2.begin(),q2.end(),pro[index2].processId),q2.end());
+						if(q2.size()==0)
+						{
+							break;
+						}
+					}
+					else
+					{
+						preprocess=pro[index2].processId;
+						q2.erase(std::remove(q2.begin(),q2.end(),pro[index2].processId),q2.end());
+						q2.push_back(preprocess);
+					}
+					
+					pI=q2.at(0);
+					for(int i=0;i<noprocess;i++)
+					{
+						if(pI==pro[i].processId)
+						{
+							index2=i;
+						}
+					}
+				}
+			}
+			else
+			{
+				cout<<"the queue Q2 is empty"<<endl;
+			}
 		}
 		
 		void display()
@@ -196,15 +288,25 @@ class Scheduling
 		}
 		void inQ2()
 		{
+			//cout<<"size of Q1: "<<q1.size()<<endl;
+			//cout<<"size of prioritySelector: "<<prioritySelector.size()<<endl; 
 			cout<<"processes in q2"<<endl;
-			for(int i=0;i<q2.size();i++)
+			if(q2.size()!=0)
 			{
-				cout<<q2.at(i)<<endl;
+				for(int i=0;i<q2.size();i++)
+				{
+					cout<<q2.at(i)<<endl;
+				}
 			}
+			else
+			{
+				cout<<"no processes in Q2"<<endl;
+			}
+			//finalResult();
 		}
 		void finalResult()
 		{
-			cout<<"completion time of processes"<<endl<<endl;
+			cout<<"Final result  timing table of processes"<<endl<<endl;
 			cout<<"PId"<<"\t\t||\t\t"<<"AT"<<"\t\t||\t\t"<<"BT"<<"\t\t||\t\t"<<"CT"<<endl<<endl;
 			for(int i=0;i<noprocess;i++)
 			{
@@ -221,8 +323,8 @@ int main()
 	sc.findMinInArrivalTime();
 	sc.processSelector();
 	sc.startQ1Process();
-	//sc.inQ2();
-	//sc.startQ2process();
+	sc.inQ2();
+	sc.startQ2process();
 	sc.finalResult();
 }
 int findMin(process pro[], int noprocess) 
