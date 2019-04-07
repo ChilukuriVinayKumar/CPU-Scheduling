@@ -17,7 +17,7 @@ Consider: 1. Queue 2 will be processed after Queue 1 becomes empty.
 using namespace std;
 struct process
 {
-	int aT,bT,copy_bT,pN,cT,wT,tAT;            //aT=ArrivalTime,bT=BurstTime,pN=PriorityNumber,cT=CompletionTime,wT=WaitingTime
+	int aT,bT,copy_bT,pN,cT,wT,tAT;         //aT=ArrivalTime,bT=BurstTime,pN=PriorityNumber,cT=CompletionTime,wT=WaitingTime
 	string processId;                      //processId=ProcessName
 };
 int findMin(process [],int);
@@ -44,7 +44,7 @@ class Scheduling
 				cout<<"  Enter the name of the process :: ";
 				cin>>pro[i].processId;
 				cout<<"  Enter  Arrival time  ||   Burst Time   ||   Priority for process   ["<<pro[i].processId<<"]  respectively"<<endl;
-				cout<<"  -->  ";
+				cout<<"  --> ";
 				cin>>pro[i].aT;
 				cin>>pro[i].bT;
 				pro[i].copy_bT=pro[i].bT;
@@ -69,7 +69,7 @@ class Scheduling
 		
 		void processSelector()
 		{
-			minPriority=findminprioritySelector(prioritySelector);
+			minPriority=*(std::min_element(prioritySelector.begin(),prioritySelector.end()));
 			for(int i=0;i<prioritySelector.size();i++)
 			{
 				if(minPriority==prioritySelector.at(i))
@@ -276,30 +276,30 @@ class Scheduling
 		void display()
 		{
 			cout<<"  Data set given by User"<<endl;
-			cout<<"  +-----------------------------------------------------------------------------------------------------------+"<<endl;
-			cout<<"  |ProcessID \t\t\tArrival Time\t\t\tBurst Time\t\t\tPriority      |"<<endl;
-			cout<<"  +-----------------------------------------------------------------------------------------------------------+"<<endl;
+			cout<<"  +-------------------------------------------------------------------------------------------------------------+"<<endl;
+			cout<<"  |  ProcessID \t\t\tArrival Time\t\t\tBurst Time\t\t\tPriority        |"<<endl;
+			cout<<"  +-------------------------------------------------------------------------------------------------------------+"<<endl;
 			for(int i=0;i<noprocess;i++)
 			{
-				cout<<"  |"<<pro[i].processId<<"\t\t\t\t"<<pro[i].aT<<"\t\t\t\t"<<pro[i].bT<<"\t\t\t\t"<<pro[i].pN<<"\t      |"<<endl;
+				cout<<"  |  "<<pro[i].processId<<"\t\t\t\t"<<pro[i].aT<<"\t\t\t\t"<<pro[i].bT<<"\t\t\t\t"<<pro[i].pN<<"\t        |"<<endl;
 			}
-			cout<<"  +-----------------------------------------------------------------------------------------------------------+"<<endl<<endl; 
+			cout<<"  +-------------------------------------------------------------------------------------------------------------+"<<endl<<endl; 
 		}
 		
 		void finalResult()
 		{
-			cout<<"  +-----------------------------------------------------------------------------------------------------------+"<<endl;
-			cout<<"  |\t\t\t\t\tFinal result  timing table of processes\t\t\t\t\t      |"<<endl;
-			cout<<"  +-----------------------------------------------------------------------------------------------------------+"<<endl;
-			cout<<"  |PId"<<"\t||\t"<<"AT"<<"\t||\t"<<"BT"<<"\t||\t"<<"CT"<<"\t||\t"<<"TAT"<<"\t||\t"<<"WT"<<"\t\t\t      |"<<endl;
-			cout<<"  +-----------------------------------------------------------------------------------------------------------+"<<endl;
+			cout<<"  +-------------------------------------------------------------------------------------------------------------+"<<endl;
+			cout<<"  |\t\t\t\t\tFinal result  timing table of processes\t\t\t\t\t        |"<<endl;
+			cout<<"  +-------------------------------------------------------------------------------------------------------------+"<<endl;
+			cout<<"  |  PId"<<"\t||\t"<<"AT"<<"\t||\t"<<"BT"<<"\t||\t"<<"CT"<<"\t||\t"<<"TAT"<<"\t||\t"<<"WT"<<"\t\t        |"<<endl;
+			cout<<"  +-------------------------------------------------------------------------------------------------------------+"<<endl;
 			for(int i=0;i<noprocess;i++)
 			{
 				pro[i].tAT=pro[i].cT-pro[i].aT;
 				pro[i].wT=pro[i].tAT-pro[i].copy_bT;
-				cout<<"  |"<<pro[i].processId<<"\t||\t"<<pro[i].aT<<"\t||\t"<<pro[i].copy_bT<<"\t||\t"<<pro[i].cT<<"\t||\t"<<pro[i].tAT<<"\t||\t"<<pro[i].wT<<"\t\t\t      |"<<endl;
+				cout<<"  |  "<<pro[i].processId<<"\t||\t"<<pro[i].aT<<"\t||\t"<<pro[i].copy_bT<<"\t||\t"<<pro[i].cT<<"\t||\t"<<pro[i].tAT<<"\t||\t"<<pro[i].wT<<"\t\t\t        |"<<endl;
 			}
-			cout<<"  +-----------------------------------------------------------------------------------------------------------+";
+			cout<<"  +-------------------------------------------------------------------------------------------------------------+";
 		}
 };
 int main()
@@ -322,14 +322,4 @@ int findMin(process pro[], int noprocess)
         mn=std::min(mn,temp); 
     } 
     return mn;
-}
-int findminprioritySelector(vector<int> prioritySelector)
-{
-	int minP=prioritySelector.at(0);
-	for(int i=0;i<prioritySelector.size();i++)
-	{
-		int tempo=prioritySelector.at(i);
-		minP=std::min(minP,tempo);
-	}
-	return minP;
 }
