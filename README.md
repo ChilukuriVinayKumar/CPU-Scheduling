@@ -7,3 +7,12 @@ If one process P1 is scheduled and running , another process P2 with higher prio
 All the processes in second level queue will complete their execution according to round robin scheduling.
 Consider: 1. Queue 2 will be processed after Queue 1 becomes empty. 
           2. Priority of Queue 2 has lower priority than in Queue 1. 
+Sample Test case:
+  TestCase1::
+  5
+  0 11 2
+  5 28 0
+  12 2 3 
+  2 10 1
+  9 16 4
+  Output::
