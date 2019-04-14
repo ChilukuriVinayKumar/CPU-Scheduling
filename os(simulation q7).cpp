@@ -5,7 +5,7 @@ Level 1 : Fixed priority preemptive Scheduling
 Level 2 : Round Robin Scheduling 
 For a Fixed priority preemptive Scheduling (Queue 1), the Priority 0 is highest priority.If one process P1 is scheduled and running , another process P2 with higher priority comes. 
 The New process (high priority) process P2 preempts currently running process P1 and process P1 will go to second level queue. 
-Time for which process will strictly execute must be considered in the multiples of 2.. 
+Time for which process will strictly execute must be considered in the multiples of 2. 
 All the processes in second level queue will complete their execution according to round robin scheduling.
 Consider: 1. Queue 2 will be processed after Queue 1 becomes empty.
 		  2. Priority of Queue 2 has lower priority than in Queue 1. 
@@ -28,8 +28,8 @@ class Scheduling
 	int noprocess,var,indef,var1,timer,minPriority,pPI,pIvar,x,previousminpriority;
 	process pro[50];
 	string previouspro;
-	vector<string> q1,q2,proId;                                   // two Queues            q1= Priority Preemptive Scheduling, q2=Round Robin Scheduling 
-	vector<int> prioritySelector,compT;      
+	vector<string> q1,q2;                                   // two Queues            q1= Priority Preemptive Scheduling, q2=Round Robin Scheduling 
+	vector<int> prioritySelector;      
 	public:
 		
 		void getData()
@@ -37,20 +37,22 @@ class Scheduling
 			cout<<"\t\t\t|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"<<endl;
 			cout<<"\t\t\t|\t\t\tCPU Scheduling  (Multi-Level)           |"<<endl;
 			cout<<"\t\t\t|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"<<endl<<endl;
-			cout<<"  NOTE :: Please enter a unique process name for each process"<<endl<<endl;
 			cout<<"  Enter the number of processes :- ";
 			cin>>noprocess;
+			if(noprocess==0) 
+				exit(0);
+			int p=65;	
 			for(int i=0;i<noprocess;i++)
 			{	
-				cout<<"  Enter the name of the process :: ";
-				cin>>pro[i].processId;
-				cout<<"  Enter  Arrival time  ||   Burst Time   ||   Priority for process   ["<<pro[i].processId<<"]  respectively"<<endl;
+				pro[i].processId=char(p);
+				cout<<"  Enter  Arrival time  ||   Burst Time   ||   Priority for process ["<<pro[i].processId<<"] respectively"<<endl;
 				cout<<"  --> ";
 				cin>>pro[i].aT;
 				cin>>pro[i].bT;
 				pro[i].copy_bT=pro[i].bT;
 				cin>>pro[i].pN;
 				pro[i].cT=0;
+				p++;
 			}
 		}
 		
@@ -79,6 +81,13 @@ class Scheduling
 					break;
 				}
 			}
+			for(int i=0;i<noprocess;i++)
+			{
+				if(pro[i].processId==q1[var])
+				{
+					var1=i;
+				}	
+			}
 			if(m>=1)
 			{
 				if(q1[var]!=previouspro)
@@ -102,13 +111,6 @@ class Scheduling
 			pIvar=var;
 			previouspro=q1[var];
 			previousminpriority=minPriority;
-			for(int i=0;i<noprocess;i++)
-			{
-				if(pro[i].processId==q1[var])
-				{
-					var1=i;
-				}	
-			}
 			pPI=var1;
 			if(checker1==1)
 			{
@@ -123,7 +125,7 @@ class Scheduling
 				checker1+=1;
 				int con=0;
 				if(pro[var1].bT==0)
-				{   
+				{  
 					for(int i=0;i<q1.size();i++)
 					{
 						if(q1.at(i)==pro[var1].processId)
@@ -145,7 +147,7 @@ class Scheduling
 				if(cTsetter==0)
 				{
 					pro[var1].cT=pro[var1].aT;
-					cTsetter=1;	
+					cTsetter=1;
 				}
 				else
 				{
@@ -234,7 +236,7 @@ class Scheduling
 			{
 				if(pro[i].aT>x)
 				{
-					x=pro[i].aT;
+					x=pro[i].aT;              // finding te maximum aT
 				}
 			}
 			while(timer<=x)
@@ -257,15 +259,8 @@ class Scheduling
 					processSelector();
 				}
 			}
-		}
-		void displ()
-		{
-			cout<<"gantt chart Id---cT"<<endl;
-			for(int i=0;i<proId.size();i++)
-			{
-				cout<<proId.at(i)<<"-----"<<compT.at(i)<<endl;
-			}
-		}
+		}				
+		
 		void display()
 		{
 			cout<<"  Data set given by User"<<endl;
@@ -281,18 +276,22 @@ class Scheduling
 		
 		void finalResult()
 		{
-			cout<<"  +-------------------------------------------------------------------------------------------------------------+"<<endl;
+			float avgwT=0;
+			cout<<"  +*************************************************************************************************************+"<<endl;
 			cout<<"  |\t\t\t\t\tFinal result  timing table of processes\t\t\t\t\t        |"<<endl;
-			cout<<"  +-------------------------------------------------------------------------------------------------------------+"<<endl;
-			cout<<"  |  PId"<<"\t||\t"<<"AT"<<"\t||\t"<<"BT"<<"\t||\t"<<"CT"<<"\t||\t"<<"TAT"<<"\t||\t"<<"WT"<<"\t\t        |"<<endl;
-			cout<<"  +-------------------------------------------------------------------------------------------------------------+"<<endl;
+			cout<<"  +*************************************************************************************************************+"<<endl;
+			cout<<"  |  PId"<<"\t||\t"<<"AT"<<"\t||\t"<<"BT"<<"\t||\t"<<"CT"<<"\t||\t"<<"TAT"<<"\t||\t  "<<"WT"<<"\t\t        |"<<endl;
+			cout<<"  +*************************************************************************************************************+"<<endl;
 			for(int i=0;i<noprocess;i++)
 			{
 				pro[i].tAT=pro[i].cT-pro[i].aT;
 				pro[i].wT=pro[i].tAT-pro[i].copy_bT;
-				cout<<"  |  "<<pro[i].processId<<"\t\t||\t"<<pro[i].aT<<"\t||\t"<<pro[i].copy_bT<<"\t||\t"<<pro[i].cT<<"\t||\t"<<pro[i].tAT<<"\t||\t"<<pro[i].wT<<"\t\t        |"<<endl;
+				avgwT+=pro[i].wT;
+				cout<<"  |  "<<pro[i].processId<<"\t\t||\t"<<pro[i].aT<<"\t||\t"<<pro[i].copy_bT<<"\t||\t"<<pro[i].cT<<"\t||\t"<<pro[i].tAT<<"\t||\t  "<<pro[i].wT<<"\t\t        |"<<endl;
+				cout<<"  +-------------------------------------------------------------------------------------------------------------+"<<endl;
 			}
-			cout<<"  +-------------------------------------------------------------------------------------------------------------+";
+			cout<<"  |\t\t\t\t\tAverage waiting time : "<<avgwT/noprocess<<"\t\t\t\t\t\t|"<<endl;
+			cout<<"  +-------------------------------------------------------------------------------------------------------------+"<<endl;
 		}
 };
 int main()
@@ -304,7 +303,6 @@ int main()
 	sc.processSelector();
 	sc.startQ1Process();
 	sc.check();
-	//sc.displ();
 	sc.finalResult();
 }
 int findMin(process pro[], int noprocess) 
@@ -331,102 +329,31 @@ int findIndex(int noprocess,string pI,process pro[])
 }
 /*
 Test case:1 ::
-
 4
-a
 0 3 2
-b
 4 5 2
-c 
 18 9 5
-d
 22 8 2
-
-output::
-	Data set given by User
-  +-------------------------------------------------------------------------------------------------------------+
-  |  ProcessID                  Arrival Time                    Burst Time                      Priority        |
-  +-------------------------------------------------------------------------------------------------------------+
-  |  a                          0                               3                               2               |
-  |  b                          4                               5                               2               |
-  |  c                          18                              9                               5               |
-  |  d                          22                              8                               2               |
-  +-------------------------------------------------------------------------------------------------------------+
-
-  +-------------------------------------------------------------------------------------------------------------+
-  |                                     Final result  timing table of processes                                 |
-  +-------------------------------------------------------------------------------------------------------------+
-  |  PId        ||      AT      ||      BT      ||      CT      ||      TAT     ||      WT                      |
-  +-------------------------------------------------------------------------------------------------------------+
-  |  a          ||      0       ||      3       ||      3       ||      3       ||      0                       |
-  |  b          ||      4       ||      5       ||      9       ||      5       ||      0                       |
-  |  c          ||      18      ||      9       ||      35      ||      17      ||      8                       |
-  |  d          ||      22      ||      8       ||      30      ||      8       ||      0                       |
-  +-------------------------------------------------------------------------------------------------------------+
 ================================================
 Test case:2 ::
 4
-p1
 0 5 3
-p2
 2 6 1
-p3
 3 3 2
-p4
 1 6 2
-
-output::
-  Data set given by User
-  +-------------------------------------------------------------------------------------------------------------+
-  |  ProcessID                  Arrival Time                    Burst Time                      Priority        |
-  +-------------------------------------------------------------------------------------------------------------+
-  |  p1                         0                               5                               3               |
-  |  p2                         2                               6                               1               |
-  |  p3                         3                               3                               2               |
-  |  p4                         1                               6                               2               |
-  +-------------------------------------------------------------------------------------------------------------+
-
-  +-------------------------------------------------------------------------------------------------------------+
-  |                                     Final result  timing table of processes                                 |
-  +-------------------------------------------------------------------------------------------------------------+
-  |  PId        ||      AT      ||      BT      ||      CT      ||      TAT     ||      WT                      |
-  +-------------------------------------------------------------------------------------------------------------+
-  |  p1         ||      0       ||      5       ||      17      ||      17      ||      12                      |
-  |  p2         ||      2       ||      6       ||      8       ||      6       ||      0                       |
-  |  p3         ||      3       ||      3       ||      11      ||      8       ||      5                       |
-  |  p4         ||      1       ||      6       ||      20      ||      19      ||      13                      |
-  +-------------------------------------------------------------------------------------------------------------+
 ==================================================
 Test case: 3 ::
 4
-a
 0 3 2
-b
 4 5 2
-c
 18 9 5
-d
 2 8 5
-
-output::
-  Data set given by User
-  +-------------------------------------------------------------------------------------------------------------+
-  |  ProcessID                  Arrival Time                    Burst Time                      Priority        |
-  +-------------------------------------------------------------------------------------------------------------+
-  |  a                          0                               3                               2               |
-  |  b                          4                               5                               2               |
-  |  c                          18                              9                               5               |
-  |  d                          2                               8                               5               |
-  +-------------------------------------------------------------------------------------------------------------+
-
-  +-------------------------------------------------------------------------------------------------------------+
-  |                                     Final result  timing table of processes                                 |
-  +-------------------------------------------------------------------------------------------------------------+
-  |  PId        ||      AT      ||      BT      ||      CT      ||      TAT     ||      WT                      |
-  +-------------------------------------------------------------------------------------------------------------+
-  |  a          ||      0       ||      3       ||      3       ||      3       ||      0                       |
-  |  b          ||      4       ||      5       ||      9       ||      5       ||      0                       |
-  |  c          ||      18      ||      9       ||      27      ||      9       ||      0                       |
-  |  d          ||      2       ||      8       ||      16      ||      14      ||      6                       |
-  +-------------------------------------------------------------------------------------------------------------+
+==================================================
+Test case: 4 ::
+5
+0 11 2
+5 28 0
+12 2 3 
+2 10 1
+9 16 4
 */
