@@ -17,6 +17,29 @@ Consider:
     2. Priority of Queue 2 has lower priority than in Queue 1. 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Sample Test case:
 
 TestCase1::
