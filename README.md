@@ -1,6 +1,6 @@
 # Scheduling
 
-priority preemption + Round robin
+ __/\__  priority preemption + Round robin
 
 Design a scheduling program to implements a Queue with two levels:
 Level 1 : Fixed priority preemptive Scheduling.
