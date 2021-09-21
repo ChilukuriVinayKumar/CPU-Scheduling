@@ -42,11 +42,11 @@ Consider:
 
 Sample Test case:
 
-TestCase1::
+# TestCase1:
 ![Screenshot (68)](https://user-images.githubusercontent.com/47757720/56092086-13846700-5ed5-11e9-9650-9edf766a2db1.png)
 
-TestCase2::
+# TestCase2:
 ![Screenshot (69)](https://user-images.githubusercontent.com/47757720/56092126-84c41a00-5ed5-11e9-80a8-9f5d82b391f5.png)
 
-TestCase3::
+# TestCase3:
 ![Screenshot (70)](https://user-images.githubusercontent.com/47757720/56092127-85f54700-5ed5-11e9-974e-37ff558b425a.png)
