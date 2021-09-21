@@ -1,6 +1,6 @@
-# Scheduling
+# Scheduling #
 
- __/\\__  priority preemption + Round robin
+priority preemption + Round Robin
 
 Design a scheduling program to implements a Queue with two levels:
 
@@ -12,9 +12,9 @@ All the processes in second level queue will complete their execution according 
 
 Consider: 
     
-    1. Queue 2 will be processed after Queue 1 becomes empty. 
+1. Queue 2 will be processed after Queue 1 becomes empty. 
 
-    2. Priority of Queue 2 has lower priority than in Queue 1. 
+2. Priority of Queue 2 has lower priority than in Queue 1. 
 
 
 Sample Test case:
