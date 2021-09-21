@@ -1,8 +1,9 @@
 # Scheduling
 
- __/\__  priority preemption + Round robin
+ __/\\__  priority preemption + Round robin
 
 Design a scheduling program to implements a Queue with two levels:
+
 Level 1 : Fixed priority preemptive Scheduling.
 Level 2 : Round Robin Scheduling For a Fixed priority preemptive Scheduling (Queue 1), the Priority 0 is highest priority. 
 
@@ -10,9 +11,10 @@ If one process P1 is scheduled and running , another process P2 with higher prio
 All the processes in second level queue will complete their execution according to round robin scheduling.
 
 Consider: 
-        1. Queue 2 will be processed after Queue 1 becomes empty. 
+    
+    1. Queue 2 will be processed after Queue 1 becomes empty. 
 
-        2. Priority of Queue 2 has lower priority than in Queue 1. 
+    2. Priority of Queue 2 has lower priority than in Queue 1. 
 
 
 Sample Test case:
